@@ -1,7 +1,7 @@
 Program solver;
 // {$MODE DELPHI}
 uses 
-    crt,sysUtils;
+    crt,sysUtils,DateUtils;
 
 type 
     inputMatrix = array[1..5, 1..5] of integer;
@@ -17,9 +17,12 @@ var
     fileIn                          : Text;
     fileName,txtTemp,phrase         : String;
     tempArr,rowTemp,colTemp         : inputStr;
-    i,counter,j,Y,X                   : integer;
+    i,counter,j,Y,X                 : integer;
     matrixStr                       : StrMatrix;
-    maskMatrix                      : boolMatrix;             
+    maskMatrix                      : boolMatrix;
+    FromTime, ToTime                : TDateTime;
+    DiffMinutes                     : double;
+         
 
 
 // Load Procedure or Functions
@@ -622,6 +625,7 @@ begin
     readln();
 
 
+    FromTime := Now;
 
     GotoXY(X,Y);
     writeln('== Proses Solving ===================================================================================');
@@ -636,7 +640,12 @@ begin
 
     GotoXY(X,Y+17);
     writeln('=====================================================================================================');
-
+    ToTime := Now;
+    DiffMinutes := MilliSecondsBetween(ToTime,FromTime);
+    GotoXY(32+12,9);
+    write('Solved Dalam Waktu : ');
+    write(DiffMinutes:10:2);
+    write(' MS');
     GotoXY(95,2);
     write('Solution : ');
     printAnswerMatrix(95,2+2);
