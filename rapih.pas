@@ -270,7 +270,7 @@ begin
         Y := TempY;
 end;
 
-procedure printAnswerMatrix(TempX, TempY : integer);
+procedure printAnswerMatrix(TempX, TempY, Target : integer);
 var 
     base : integer;
 begin
@@ -292,8 +292,17 @@ begin
                 tempX := tempX + 3;
                 TextBackground(black);
             end;
+
+            //Row Sum
             GotoXY(tempX,TempY);
-            TextBackground(13);
+            if(i <= Target) then
+            begin
+                TextBackground(14);
+            end
+            else
+            begin
+                TextBackground(13);
+            end;
             write('  ');
             GotoXY(tempX,TempY);
             write(row[i]);
@@ -600,7 +609,7 @@ begin
         GotoXY(TempX,TempY);
         write('Matrix Solusi : ');
         TempY := TempY + 2;
-        printAnswerMatrix(TempX,TempY);
+        printAnswerMatrix(TempX,TempY, TargetRow);
     end;
 end;
 
@@ -648,6 +657,6 @@ begin
     write(' MS');
     GotoXY(95,2);
     write('Solution : ');
-    printAnswerMatrix(95,2+2);
+    printAnswerMatrix(95,2+2, 5);
     readln;
 end.
