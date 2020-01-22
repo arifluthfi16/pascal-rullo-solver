@@ -1,0 +1,94 @@
+procedure getPossibleRow(targetRow : integer);
+var
+    ansHash, selectedHash, selectedBase, otherBig, tempSelected               : hashArr;
+    isRowSolved                                                               : boolean;  
+    TempY,TempX : integer;
+begin
+    TempY := Y;
+    TempX := X;
+    if(targetRow>1) then
+    begin
+        TempX := TempX*targetRow+(10*targetRow-2)-8;
+    end;
+    isRowSolved := false;
+    ansHash := blankHash();
+    selectedBase := ansHash;
+
+    while((isRowSolved = false) and (hashFilled(selectedBase) = false)) do
+    begin
+        // Select a new base and don't reselect ever selected base
+        ansHash := selectNewHighest(matrix[targetRow],selectedBase);
+    
+        //Update Selected base
+        for i := 1 to 5 do
+            begin
+                if(ansHash[i] = true) then 
+                begin
+                    selectedBase[i] := true;
+                end;
+            end;
+        
+        if(hashSum(ansHash,matrix[targetRow]) = row[targetRow]) then
+        begin
+            isRowSolved := true;
+        end;
+
+        if(isRowSolved = true) then
+        begin
+            maskMatrix[targetRow] := ansHash;
+        end
+
+        // if row is not solved try to add base number with other biggest number
+        // Here will try every possibilities
+        else
+        begin
+            // Update selected hash to the latest answer so it wont reselect
+
+            selectedHash := ansHash;
+            tempSelected := ansHash;
+            while((hashFilled(selectedHash) = false) and (isRowSolved = false)) do 
+            begin
+
+                if(hashSum(tempSelected, matrix[targetRow]) > row[targetRow]) then
+                begin   
+                    tempSelected := ansHash;
+          
+                end;
+                
+                otherBig := selectNewHighest(matrix[targetRow], selectedHash);
+                
+                //Update Selected base
+                for i := 1 to 5 do
+                    begin
+                        if(otherBig[i] = true) then 
+                        begin
+                            selectedHash[i] := true;
+                            tempSelected[i] := true;
+                        end;
+                    end;
+
+                if(hashSum(tempSelected,matrix[targetRow]) = row[targetRow]) then
+                begin
+                    isRowSolved := true;
+
+                    ansHash := tempSelected;
+                                    
+                end
+                else if(hashSum(tempSelected,matrix[targetRow]) < row[targetRow]) then
+                begin
+                    ansHash := tempSelected;
+                end;
+            end;
+        end;
+
+    end; // End of main while
+
+    //Check if row is solved
+    if(isRowSolved)then  
+    begin
+        maskMatrix[targetRow] := ansHash;
+    
+        // Print Answer 
+        write(answer);
+    end;
+end;
